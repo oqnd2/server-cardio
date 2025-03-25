@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const mysql = require('mysql2');
+const bcrypt = require('bcrypt');
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -27,6 +28,21 @@ db.connect(err => {
 // Ruta de prueba
 app.get('/', (req, res) => {
     res.send('¡Servidor Express funcionando!');
+});
+
+// Ruta para crear un perfil con contraseña encriptada
+app.post('/register', async (req, res) => {
+    const { name, lastName, email, password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    db.query('INSERT INTO users (name, lastName, email, password) VALUES (?, ?, ?, ?)', 
+    [name, lastName, email, hashedPassword], (err) => {
+        if (err) {
+            res.status(500).json({ error: 'Error al registrar usuario' });
+            return;
+        }
+        res.json({ mensaje: 'Usuario registrado con éxito' });
+    });
 });
 
 // Iniciar servidor
