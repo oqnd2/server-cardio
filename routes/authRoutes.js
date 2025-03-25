@@ -5,14 +5,14 @@ const db = require('../config/db');
 const router = express.Router();
 
 // Ruta para crear un perfil con contraseña encriptada
-app.post('/registro', async (req, res) => {
-    const { nombre, email, password } = req.body;
+router.post('/register', async (req, res) => {
+    const { name, lastName, email, password } = req.body;
 
-    if (!nombre || !email || !password) {
+    if (!name || !lastName || !email || !password) {
         return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
 
-    db.query('SELECT * FROM usuarios WHERE email = ?', [email], async (err, results) => {
+    db.query('SELECT * FROM users WHERE email = ?', [email], async (err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Error en la base de datos' });
         }
@@ -23,8 +23,8 @@ app.post('/registro', async (req, res) => {
 
         try {
             const hashedPassword = await bcrypt.hash(password, 10);
-            db.query('INSERT INTO usuarios (nombre, email, password) VALUES (?, ?, ?)', 
-            [nombre, email, hashedPassword], (err) => {
+            db.query('INSERT INTO users (name, lastName, email, password) VALUES (?, ?, ?)', 
+            [name, lastName, email, hashedPassword], (err) => {
                 if (err) {
                     return res.status(500).json({ error: 'Error al registrar usuario' });
                 }
