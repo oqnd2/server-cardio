@@ -40,3 +40,12 @@ Este es un servidor en **Node.js** con **Express.js** que maneja autenticación 
    JWT_SECRET=tu_secreto_super_seguro
    ```
 
+## Uso ⚡
+### Ejecutar el servidor en desarrollo
+```sh
+npm run dev
+```
+O en producción:
+```sh
+npm start
+```
