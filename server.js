@@ -33,17 +33,27 @@ app.get('/', (req, res) => {
 // Ruta para crear un perfil con contraseña encriptada
 app.post('/register', async (req, res) => {
     const { name, lastName, email, password } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
 
-    db.query('INSERT INTO users (name, lastName, email, password) VALUES (?, ?, ?, ?)', 
-    [name, lastName, email, hashedPassword], (err) => {
-        if (err) {
-            res.status(500).json({ error: 'Error al registrar usuario' });
-            return;
-        }
-        res.json({ mensaje: 'Usuario registrado con éxito' });
-    });
+    if (!name || !lastName || !email || !password) {
+        return res.status(400).json({ error: "Todos los campos son obligatorios" });
+    }
+
+    try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        db.query('INSERT INTO users (name, lastName, email, password) VALUES (?, ?, ?, ?)', 
+        [name, lastName, email, hashedPassword], (err) => {
+            if (err) {
+                return res.status(500).json({ error: 'Error al registrar usuario' });
+            }
+            res.json({ mensaje: 'Usuario registrado con éxito' });
+        });
+
+    } catch (error) {
+        res.status(500).json({ error: 'Error al encriptar la contraseña' });
+    }
 });
+
 
 // Iniciar servidor
 app.listen(port, () => {
