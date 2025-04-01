@@ -2,7 +2,7 @@
 
 Este es un servidor en **Node.js** con **Express.js** que maneja autenticación de usuarios utilizando **bcrypt** para encriptar contraseñas y **JWT** para la gestión de sesiones. Además, ahora permite el envío de datos de ritmos cardíacos (BPM) y su almacenamiento en la base de datos. Este servidor es utilizado para un proyecto usando **ESP32** con sensor de ritmo cardiaco.
 
-## Características ✨
+## Características
 - Registro de usuarios con contraseñas encriptadas.
 - Inicio de sesión con generación de **JSON Web Token (JWT)**.
 - Conexión a base de datos **MySQL**.
