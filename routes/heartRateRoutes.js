@@ -6,7 +6,7 @@ const authenticateToken = require("../middlewares/authMidleware");
 // 📌 Ruta para registrar una nueva medición de ritmo cardíaco
 router.post("/add", authenticateToken, (req, res) => {
     const { bpm } = req.body;
-    const userId = req.user.id;  // Ahora obtenemos el ID desde el token
+    const userId = req.user.id;
 
     if (!bpm) {
         return res.status(400).json({ error: "BPM es requerido" });
@@ -18,9 +18,19 @@ router.post("/add", authenticateToken, (req, res) => {
             console.error("Error al insertar BPM:", err);
             return res.status(500).json({ error: "Error al guardar los datos" });
         }
+
+        // ✅ WebSocket: enviar solo al usuario conectado
+        const userConnections = req.app.locals.userConnections;
+        const userSocket = userConnections.get(userId);
+
+        if (userSocket && userSocket.readyState === 1) {
+            userSocket.send(JSON.stringify({ bpm }));
+        }
+
         res.json({ message: "Registro exitoso", id: result.insertId });
     });
 });
+
 
 // 📌 Ruta para obtener los registros de BPM de un usuario
 router.get("/", authenticateToken, (req, res) => {
