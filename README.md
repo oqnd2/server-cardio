@@ -10,7 +10,7 @@ Este es un servidor en **Node.js** con **Express.js** que maneja autenticación 
 - Separación de rutas para mayor organización.
 - Envío y almacenamiento de datos de BPM de los usuarios.
 
-## Tecnologías utilizadas 🛠️
+## Tecnologías utilizadas 
 - Node.js
 - Express.js
 - MySQL
